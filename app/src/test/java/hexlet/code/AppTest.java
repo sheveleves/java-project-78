@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AppTest {
     private static final int NUMBER_5 = 5;
     private static final int NUMBER_MINUS_10 = -10;
@@ -50,5 +53,25 @@ public class AppTest {
         assertThat(schema.isValid(NUMBER_10)).isTrue();
         assertThat(schema.isValid(NUMBER_4)).isFalse();
         assertThat(schema.isValid(NUMBER_11)).isFalse();
+    }
+
+    @Test
+    public void testMapSchema() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+
+        assertThat(schema.isValid(null)).isTrue();
+
+        schema.required();
+        assertThat(schema.isValid(null)).isFalse();
+        assertThat(schema.isValid(new HashMap<>())).isTrue();
+        Map<String, String> data = new HashMap<>();
+        data.put("key1", "value");
+        assertThat(schema.isValid(data)).isTrue();
+
+        schema.sizeof(2);
+        assertThat(schema.isValid(data)).isFalse();
+        data.put("key2", "value");
+        assertThat(schema.isValid(data)).isTrue();
     }
 }
