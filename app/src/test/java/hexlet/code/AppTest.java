@@ -13,6 +13,8 @@ public class AppTest {
     private static final int NUMBER_10 = 10;
     private static final int NUMBER_4 = 4;
     private static final int NUMBER_11 = 11;
+    private static final int NUMBER_100 = 100;
+
     @Test
     public void testStringSchema() {
         Validator v = new Validator();
@@ -73,5 +75,36 @@ public class AppTest {
         assertThat(schema.isValid(data)).isFalse();
         data.put("key2", "value");
         assertThat(schema.isValid(data)).isTrue();
+    }
+
+    @Test
+    public void testMap() {
+        Validator v = new Validator();
+        MapSchema schema = v.map();
+
+        Map<String, BaseSchema> schemas = new HashMap<>();
+        schemas.put("name", v.string().required());
+        schemas.put("age", v.number().positive());
+        schema.shape(schemas);
+
+        Map<String, Object> human1 = new HashMap<>();
+        human1.put("name", "Kolya");
+        human1.put("age", NUMBER_100);
+        assertThat(schema.isValid(human1)).isTrue();
+
+        Map<String, Object> human2 = new HashMap<>();
+        human2.put("name", "Maya");
+        human2.put("age", null);
+        assertThat(schema.isValid(human2)).isTrue();
+
+        Map<String, Object> human3 = new HashMap<>();
+        human3.put("name", "");
+        human3.put("age", null);
+        assertThat(schema.isValid(human3)).isFalse();
+
+        Map<String, Object> human4 = new HashMap<>();
+        human4.put("name", "Valya");
+        human4.put("age", NUMBER_MINUS_10);
+        assertThat(schema.isValid(human4)).isFalse();
     }
 }

@@ -1,29 +1,56 @@
 package hexlet.code;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema {
     private int requiredSize = -1;
+    private Map<?, BaseSchema> checkData;
 
     public MapSchema sizeof(int number) {
         requiredSize = number;
         return this;
     }
 
-    private Predicate<Object> isRequired = x -> x instanceof Map<?, ?>;
-    private Predicate<Map<?, ?>> isEmpty = Map::isEmpty;
-
-    private Predicate<Map<?, ?>> isSizeof = x -> x.size() >= requiredSize;
-
-    public boolean isValid(Object value) {
-        if (isNotRequired()) {
+    @Override
+    public boolean isRequired(Object value) {
+        if (getRequired()) {
+            return value instanceof Map<?, ?>;
+        } else {
             return true;
         }
-        if (requiredSize == -1) {
-            return isRequired.test(value);
+    }
+    private Predicate<Map<?, ?>> isSizeof = x -> requiredSize == -1 || x.size() >= requiredSize;
+
+    public boolean isValid(Object value) {
+        if (!isRequired(value)) {
+            return false;
         }
-        Map<Object, Object> map = (Map<Object, Object>) value;
-        return isSizeof.test(map);
+
+        if (value instanceof Map<?, ?> && !isSizeof.test((Map<?, ?>) value)) {
+            return false;
+        }
+
+        Map<?, Object> map = (Map<?, Object>) value;
+
+        if (checkData == null) {
+            return true;
+        }
+
+        Set<?> key = checkData.keySet();
+        for (Map.Entry<?, Object> entry: map.entrySet()) {
+            if (key.contains(entry.getKey())) {
+                BaseSchema setup = checkData.get(entry.getKey());
+                if (!setup.isValid(entry.getValue())) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void shape(Map<?, BaseSchema> setup) {
+        checkData = setup;
     }
 }

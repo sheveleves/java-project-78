@@ -19,14 +19,27 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-    private Predicate<Object> isRequired = x -> x instanceof Integer;
-    private Predicate<Integer> isPositive = x -> x > 0;
+    @Override
+    public boolean isRequired(Object value) {
+        if (getRequired()) {
+            return value instanceof Integer;
+        } else {
+            return true;
+        }
+    }
+
+    private Predicate<Integer> isPositive = x -> x == null || !positive || x > 0;
     private Predicate<Integer> isRange = x -> range.isEmpty() || x >= range.get(0) && x <= range.get(1);
 
     public boolean isValid(Object value) {
+        if (!isRequired(value)) {
+            return false;
+        }
 
-        return isNotRequired()
-                || isRequired.test(value) && isPositive.test((Integer) value) && isRange.test((Integer) value);
+        if (!isPositive.test((Integer) value)) {
+            return false;
+        }
 
+        return isRange.test((Integer) value);
     }
 }

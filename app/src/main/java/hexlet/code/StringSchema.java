@@ -18,13 +18,26 @@ public final class StringSchema extends BaseSchema {
         return this;
     }
 
-    private Predicate<Object> isRequired = x -> ((x instanceof String) && !Objects.equals(x, ""));
-    private Predicate<String> isMinLength = x -> x.length() >= minLength;
+    @Override
+    public boolean isRequired(Object value) {
+        if (getRequired()) {
+            return value instanceof String && !Objects.equals(value, "");
+        } else {
+            return true;
+        }
+    }
+    private Predicate<String> isMinLength = x -> minLength == -1 || x.length() >= minLength;
     private Predicate<String> isContains = x -> str == null || x.contains(str);
 
 
     public boolean isValid(Object value) {
-        return isNotRequired()
-                || isRequired.test(value) && isMinLength.test(value.toString()) && isContains.test(value.toString());
+        if (!isRequired(value)) {
+            return false;
+        }
+
+        if (value != null && !isMinLength.test(value.toString())) {
+            return false;
+        }
+        return value == null || isContains.test(value.toString());
     }
 }
