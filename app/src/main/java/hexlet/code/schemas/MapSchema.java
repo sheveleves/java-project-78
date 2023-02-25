@@ -14,6 +14,12 @@ public final class MapSchema extends BaseSchema {
     }
 
     @Override
+    public MapSchema required() {
+        super.setRequired();
+        return this;
+    }
+
+    @Override
     public boolean isRequired(Object value) {
         if (getRequired()) {
             return value instanceof Map<?, ?>;

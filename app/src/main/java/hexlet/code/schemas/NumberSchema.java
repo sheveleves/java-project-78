@@ -42,4 +42,9 @@ public final class NumberSchema extends BaseSchema {
 
         return isRange.test((Integer) value);
     }
+    @Override
+    public NumberSchema required() {
+        super.setRequired();
+        return this;
+    }
 }

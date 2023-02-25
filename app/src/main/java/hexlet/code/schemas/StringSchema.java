@@ -40,4 +40,10 @@ public final class StringSchema extends BaseSchema {
         }
         return value == null || isContains.test(value.toString());
     }
+
+    @Override
+    public StringSchema required() {
+        super.setRequired();
+        return this;
+    }
 }
