@@ -3,6 +3,7 @@ plugins {
     id 'checkstyle'
     id 'com.adarshr.test-logger' version '3.2.0'
     id 'jacoco'
+    id 'application'
 }
 
 jacocoTestReport {
@@ -41,4 +42,8 @@ compileJava {
 
 testlogger {
     theme 'mocha'
+}
+
+application {
+    mainClass = 'hexlet.code.App'
 }
