@@ -1,10 +1,12 @@
 package hexlet.code.schemas;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
 public final class StringSchema extends BaseSchema {
-    private String str = null;
+    private List<String> list = new ArrayList<>();
     private int minLength = -1;
     private String contains = null;
 
@@ -14,7 +16,7 @@ public final class StringSchema extends BaseSchema {
     }
 
     public StringSchema contains(String string) {
-        str = string;
+        list.add(string);
         return this;
     }
 
@@ -26,8 +28,20 @@ public final class StringSchema extends BaseSchema {
             return true;
         }
     }
+
     private Predicate<String> isMinLength = x -> minLength == -1 || x.length() >= minLength;
-    private Predicate<String> isContains = x -> str == null || x.contains(str);
+    private Predicate<String> isContains = x -> {
+        if (list.isEmpty()) {
+            return true;
+        }
+
+        for (String string : list) {
+            if (!x.contains(string)) {
+                return false;
+            }
+        }
+        return true;
+    };
 
 
     public boolean isValid(Object value) {

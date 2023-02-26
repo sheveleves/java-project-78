@@ -20,7 +20,7 @@ public class AppTest {
     private static final int NUMBER_100 = 100;
 
     @Test
-    public void testStringSchema() {
+    public void testStringSchema1() {
         Validator v = new Validator();
         StringSchema schema = v.string();
 
@@ -37,6 +37,20 @@ public class AppTest {
         assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
         assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
         assertThat(schema.isValid("what does the fox say")).isFalse();
+    }
+
+    @Test
+    public void testStringSchema2() {
+        Validator v = new Validator();
+        StringSchema schema = v.string();
+
+        assertThat(schema.contains("one").isValid("one two three four five")).isTrue();
+        assertThat(schema.contains("tw").isValid("one two three four five")).isTrue();
+        assertThat(schema.contains("three").isValid("one two three four five")).isTrue();
+        assertThat(schema.contains("four").isValid("two three four five")).isFalse();
+        assertThat(schema.isValid("one eleven three four five")).isFalse();
+        assertThat(schema.isValid("one eleven two three four five")).isTrue();
+        assertThat(schema.isValid(null)).isTrue();
     }
 
     @Test
