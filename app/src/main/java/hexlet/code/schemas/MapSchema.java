@@ -27,7 +27,7 @@ public final class MapSchema extends BaseSchema {
             return true;
         }
     }
-    private Predicate<Map<?, ?>> isSizeof = x -> requiredSize == -1 || x.size() >= requiredSize;
+    private Predicate<Map<?, ?>> isSizeof = x -> requiredSize == -1 || x.size() == requiredSize;
 
     public boolean isValid(Object value) {
         if (!isRequired(value)) {

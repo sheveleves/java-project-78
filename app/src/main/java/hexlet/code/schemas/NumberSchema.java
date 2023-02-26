@@ -22,26 +22,35 @@ public final class NumberSchema extends BaseSchema {
     @Override
     public boolean isRequired(Object value) {
         if (getRequired()) {
-            return value instanceof Integer;
+            return value instanceof Double || value instanceof Integer;
         } else {
             return true;
         }
     }
 
-    private Predicate<Integer> isPositive = x -> x == null || !positive || x > 0;
-    private Predicate<Integer> isRange = x -> range.isEmpty() || x >= range.get(0) && x <= range.get(1);
+    private Predicate<Double> isPositive = x -> x == null || !positive || x > 0;
+    private Predicate<Double> isRange = x -> range.isEmpty() || x >= range.get(0) && x <= range.get(1);
 
     public boolean isValid(Object value) {
         if (!isRequired(value)) {
             return false;
         }
 
-        if (!isPositive.test((Integer) value)) {
+        double doubleValue;
+
+        if (value == null) {
+            return true;
+        } else {
+            doubleValue = Double.parseDouble(value.toString());
+        }
+
+        if (!isPositive.test(doubleValue)) {
             return false;
         }
 
-        return isRange.test((Integer) value);
+        return isRange.test(doubleValue);
     }
+
     @Override
     public NumberSchema required() {
         super.setRequired();

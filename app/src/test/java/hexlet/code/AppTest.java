@@ -33,6 +33,10 @@ public class AppTest {
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid(NUMBER_5)).isFalse();
         assertThat(schema.isValid("")).isFalse();
+        schema.minLength(NUMBER_10);
+        assertThat(schema.isValid("hexlet")).isFalse();
+        assertThat(schema.isValid(NUMBER_5)).isFalse();
+        assertThat(schema.isValid("")).isFalse();
         assertThat(schema.contains("wh").isValid("what does the fox say")).isTrue();
         assertThat(schema.contains("what").isValid("what does the fox say")).isTrue();
         assertThat(schema.contains("whatthe").isValid("what does the fox say")).isFalse();
@@ -54,7 +58,7 @@ public class AppTest {
     }
 
     @Test
-    public void testNumberSchema() {
+    public void testNumberSchema2() {
         Validator v = new Validator();
         NumberSchema schema = v.number();
 
@@ -86,13 +90,16 @@ public class AppTest {
         assertThat(schema.isValid(null)).isFalse();
         assertThat(schema.isValid(new HashMap<>())).isTrue();
         Map<String, String> data = new HashMap<>();
-        data.put("key1", "value");
+        data.put("key1", "value1");
         assertThat(schema.isValid(data)).isTrue();
 
         schema.sizeof(2);
         assertThat(schema.isValid(data)).isFalse();
-        data.put("key2", "value");
+        data.put("key2", "value2");
         assertThat(schema.isValid(data)).isTrue();
+
+        data.put("key3", "value3");
+        assertThat(schema.isValid(data)).isFalse();
     }
 
     @Test

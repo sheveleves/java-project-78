@@ -11,7 +11,7 @@ public final class StringSchema extends BaseSchema {
     private String contains = null;
 
     public StringSchema minLength(int length) {
-        length = length;
+        minLength = length;
         return this;
     }
 
