@@ -5,55 +5,25 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public final class NumberSchema extends BaseSchema {
-    private boolean positive = false;
-    private ArrayList<Integer> range = new ArrayList<>();
+//    private boolean required = false;
+    private ArrayList<Integer> rangeList = new ArrayList<>();
 
     public NumberSchema positive() {
-        positive = true;
+        Predicate<Double> positive = x -> x > 0;
+        addValidator("positive", positive);
         return this;
     }
 
     public NumberSchema range(int number1, int number2) {
-        range.clear();
-        range.addAll(List.of(number1, number2));
+        rangeList.clear();
+        rangeList.addAll(List.of(number1, number2));
+        Predicate<Double> range = x -> x >= rangeList.get(0) && x <= rangeList.get(1);
+        addValidator("range", range);
         return this;
     }
 
-    @Override
-    public boolean isRequired(Object value) {
-        if (getRequired()) {
-            return value instanceof Double || value instanceof Integer;
-        } else {
-            return true;
-        }
-    }
-
-    private Predicate<Double> isPositive = x -> x == null || !positive || x > 0;
-    private Predicate<Double> isRange = x -> range.isEmpty() || x >= range.get(0) && x <= range.get(1);
-
-    public boolean isValid(Object value) {
-        if (!isRequired(value)) {
-            return false;
-        }
-
-        double doubleValue;
-
-        if (value == null) {
-            return true;
-        } else {
-            doubleValue = Double.parseDouble(value.toString());
-        }
-
-        if (!isPositive.test(doubleValue)) {
-            return false;
-        }
-
-        return isRange.test(doubleValue);
-    }
-
-    @Override
     public NumberSchema required() {
-        super.setRequired();
+        this.setRequired();
         return this;
     }
 }

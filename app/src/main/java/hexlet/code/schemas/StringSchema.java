@@ -2,62 +2,38 @@ package hexlet.code.schemas;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 public final class StringSchema extends BaseSchema {
     private List<String> list = new ArrayList<>();
-    private int minLength = -1;
-    private String contains = null;
+//    private boolean required = false;
 
     public StringSchema minLength(int length) {
-        minLength = length;
+        Predicate<String> minLength = x -> x.length() > length;
+        addValidator("minLength", minLength);
         return this;
     }
 
     public StringSchema contains(String string) {
         list.add(string);
+        Predicate<String> contains = x -> {
+            if (list.isEmpty()) {
+                return true;
+            }
+
+            for (String string1 : list) {
+                if (!x.contains(string1)) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        addValidator("contains", contains);
         return this;
     }
 
-    @Override
-    public boolean isRequired(Object value) {
-        if (getRequired()) {
-            return value instanceof String && !Objects.equals(value, "");
-        } else {
-            return true;
-        }
-    }
-
-    private Predicate<String> isMinLength = x -> minLength == -1 || x.length() >= minLength;
-    private Predicate<String> isContains = x -> {
-        if (list.isEmpty()) {
-            return true;
-        }
-
-        for (String string : list) {
-            if (!x.contains(string)) {
-                return false;
-            }
-        }
-        return true;
-    };
-
-
-    public boolean isValid(Object value) {
-        if (!isRequired(value)) {
-            return false;
-        }
-
-        if (value != null && !isMinLength.test(value.toString())) {
-            return false;
-        }
-        return value == null || isContains.test(value.toString());
-    }
-
-    @Override
     public StringSchema required() {
-        super.setRequired();
+        this.setRequired();
         return this;
     }
 }
