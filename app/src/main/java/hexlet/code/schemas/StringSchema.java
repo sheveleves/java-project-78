@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 public final class StringSchema extends BaseSchema {
     private List<String> list = new ArrayList<>();
-//    private boolean required = false;
 
     public StringSchema minLength(int length) {
         Predicate<String> minLength = x -> x.length() > length;
@@ -32,8 +31,8 @@ public final class StringSchema extends BaseSchema {
         return this;
     }
 
-    public StringSchema required() {
-        this.setRequired();
-        return this;
-    }
+//    public StringSchema required() {
+//        super.required();
+//        return this;
+//    }
 }

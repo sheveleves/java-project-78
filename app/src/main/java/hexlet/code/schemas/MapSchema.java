@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema {
     private Map<?, BaseSchema> checkData;
-//    private boolean required = false;
 
     public MapSchema sizeof(int number) {
         Predicate<Map> sizeof = x -> x.size() == number;
@@ -34,9 +33,5 @@ public final class MapSchema extends BaseSchema {
             return true;
         };
         addValidator("shape", shape);
-    }
-
-    public void required() {
-        this.setRequired();
     }
 }

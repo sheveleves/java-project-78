@@ -12,14 +12,10 @@ public abstract class BaseSchema {
         checkForData.put(nameCheck, caseCheck);
     }
 
-    public final void setRequired() {
-        this.required = true;
+    public final BaseSchema required() {
+        required = true;
+        return this;
     }
-
-//    protected BaseSchema required() {
-//        required = true;
-//        return this;
-//    }
 
     public final boolean isValid(Object value) {
         if (required && value == null) {

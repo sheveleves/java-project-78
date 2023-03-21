@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public final class NumberSchema extends BaseSchema {
-//    private boolean required = false;
     private ArrayList<Integer> rangeList = new ArrayList<>();
 
     public NumberSchema positive() {
@@ -22,8 +21,8 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-    public NumberSchema required() {
-        this.setRequired();
-        return this;
-    }
+//    public NumberSchema required() {
+//        super.required();
+//        return this;
+//    }
 }
