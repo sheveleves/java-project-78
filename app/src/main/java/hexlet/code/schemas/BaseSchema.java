@@ -12,7 +12,7 @@ public abstract class BaseSchema {
         checkForData.put(nameCheck, caseCheck);
     }
 
-    public final BaseSchema required() {
+    public BaseSchema required() {
         required = true;
         return this;
     }

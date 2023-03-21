@@ -31,8 +31,9 @@ public final class StringSchema extends BaseSchema {
         return this;
     }
 
-//    public StringSchema required() {
-//        super.required();
-//        return this;
-//    }
+    public StringSchema required() {
+        super.required();
+        return this;
+    }
+
 }

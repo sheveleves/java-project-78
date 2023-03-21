@@ -21,8 +21,8 @@ public final class NumberSchema extends BaseSchema {
         return this;
     }
 
-//    public NumberSchema required() {
-//        super.required();
-//        return this;
-//    }
+    public NumberSchema required() {
+        super.required();
+        return this;
+    }
 }
