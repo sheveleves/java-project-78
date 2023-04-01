@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema {
-    private Map<?, BaseSchema> checkData;
 
     public MapSchema sizeof(int number) {
         Predicate<Map> sizeof = x -> x.size() == number;
@@ -13,14 +12,9 @@ public final class MapSchema extends BaseSchema {
         return this;
     }
 
-    public void shape(Map<?, BaseSchema> setup) {
-        checkData = setup;
+    public MapSchema shape(Map<?, BaseSchema> checkData) {
 
         Predicate<Map<?, Object>> shape = x -> {
-            if (checkData == null) {
-                return true;
-            }
-
             Set<?> key = checkData.keySet();
             for (Map.Entry<?, Object> entry : x.entrySet()) {
                 if (key.contains(entry.getKey())) {
@@ -33,5 +27,6 @@ public final class MapSchema extends BaseSchema {
             return true;
         };
         addValidator("shape", shape);
+        return this;
     }
 }
