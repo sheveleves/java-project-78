@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 public final class StringSchema extends BaseSchema {
 
     public StringSchema minLength(int length) {
-        Predicate<String> minLength = x -> x.length() > length;
+        Predicate<String> minLength = x -> x.length() >= length;
         addValidator("minLength", minLength);
         return this;
     }
