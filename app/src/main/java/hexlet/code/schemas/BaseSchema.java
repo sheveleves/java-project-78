@@ -12,6 +12,10 @@ public abstract class BaseSchema {
         checkForData.put(nameCheck, caseCheck);
     }
 
+    /**
+     * This method sets a not-null requirement for data.
+     * @return this class with change required fiend on true
+     */
     public BaseSchema required() {
         required = true;
         return this;
