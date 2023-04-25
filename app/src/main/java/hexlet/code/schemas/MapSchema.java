@@ -5,6 +5,12 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema {
+    @Override
+    public MapSchema required() {
+        Predicate<Object> required = x -> x instanceof Map;
+        addValidator("a", required);
+        return this;
+    }
 
     public MapSchema sizeof(int number) {
         Predicate<Map> sizeof = x -> x.size() == number;

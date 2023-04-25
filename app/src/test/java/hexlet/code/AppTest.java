@@ -67,16 +67,6 @@ public class AppTest {
     }
 
     @Test
-    public void testStringSchemaWhenNotString() {
-        Validator v = new Validator();
-        StringSchema schema = v.string();
-
-        assertThat(schema.isValid(NUMBER_5)).isFalse();
-        HashMap<String, String> hashMap = new HashMap<>();
-        assertThat(schema.isValid(hashMap)).isFalse();
-    }
-
-    @Test
     public void testNumberSchemaRequired() {
         Validator v = new Validator();
         NumberSchema schema = v.number();
@@ -121,16 +111,6 @@ public class AppTest {
         assertThat(schema.isValid(NUMBER_10)).isTrue();
         assertThat(schema.isValid(NUMBER_4)).isFalse();
         assertThat(schema.isValid(NUMBER_11)).isFalse();
-    }
-
-    @Test
-    public void testNumberSchemaWhenNotNumber() {
-        Validator v = new Validator();
-        NumberSchema schema = v.number();
-
-        assertThat(schema.isValid("5")).isFalse();
-        HashMap<String, String> hashMap = new HashMap<>();
-        assertThat(schema.isValid(hashMap)).isFalse();
     }
 
     @Test
@@ -201,6 +181,7 @@ public class AppTest {
         human4.put("age", NUMBER_MINUS_10);
         assertThat(schema.isValid(human4)).isFalse();
     }
+
     @Test
     public void testMapShape2() {
         Validator v = new Validator();

@@ -18,6 +18,13 @@ public final class StringSchema extends BaseSchema {
 
     @Override
     public StringSchema required() {
-        return (StringSchema) super.required();
+        Predicate<Object> required = x -> {
+            if (!(x instanceof String)) {
+                return false;
+            }
+            return !x.toString().equals("");
+        };
+        addValidator("a", required);
+        return this;
     }
 }

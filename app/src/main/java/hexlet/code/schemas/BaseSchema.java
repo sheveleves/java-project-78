@@ -1,60 +1,34 @@
 package hexlet.code.schemas;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Predicate;
 
 public abstract class BaseSchema {
-    private  Map<String, Predicate> checkForData = new HashMap<>();
-    private boolean required = false;
+    private Map<String, Predicate> checkForData = new TreeMap<>();
+    private boolean isNullValid = false;
 
     public final <T> void addValidator(String nameCheck, Predicate<T> caseCheck) {
         checkForData.put(nameCheck, caseCheck);
     }
 
-    /**
-     * This method sets a not-null requirement for data.
-     * @return this class with change required fiend on true
-     */
-    public BaseSchema required() {
-        required = true;
-        return this;
+    protected BaseSchema() {
+        checkForData.put("a", x -> {
+            isNullValid = x == null;
+            return true;
+        });
     }
+
+    public abstract BaseSchema required();
 
     public final boolean isValid(Object value) {
-        if (required && value == null) {
-            return false;
-        }
-
-        if (!required && value == null) {
-            return true;
-        }
-
-        if (this instanceof StringSchema) {
-            if (required && value.toString().equals("")) {
-                return false;
-            }
-        }
-
-        if (this instanceof StringSchema) {
-            return value instanceof String && check(value.toString());
-        }
-
-        if (this instanceof NumberSchema) {
-            return (value instanceof Double || value instanceof Integer) && check(Double.parseDouble(value.toString()));
-        }
-
-        if (this instanceof MapSchema) {
-            return value instanceof Map && check(value);
-        }
-        return true;
-    }
-
-    private boolean check(Object value) {
         boolean result = true;
-        for (Map.Entry<String, Predicate> check: checkForData.entrySet()) {
+        for (Map.Entry<String, Predicate> check : checkForData.entrySet()) {
+            isNullValid = false;
             result = check.getValue().test(value);
-
+            if (isNullValid) {
+                return true;
+            }
             if (!result) {
                 return false;
             }
